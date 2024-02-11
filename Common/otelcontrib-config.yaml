@@ -1,0 +1,49 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+      grpc:
+
+processors:
+  batch:
+    timeout: 10s
+
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 100 
+
+exporters:
+  otlp:
+    endpoint: "jaeger:4317"
+    tls:
+      insecure: true
+
+  elasticsearch/log:
+    endpoints: ["http://elasticsearch:9200"]
+    logs_index: "myservice-logs"
+    tls:
+      insecure_skip_verify: true
+
+  logging:
+    loglevel: debug
+  debug:
+      verbosity: detailed
+  
+extensions:
+  health_check:
+  pprof:
+    endpoint: :1888
+  zpages:
+    endpoint: :55679
+
+service:
+  extensions: [pprof, zpages, health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: []
+      exporters: [debug,logging,otlp]
+    logs:
+      receivers: [otlp]
+      processors: []
+      exporters: [debug,logging, elasticsearch/log]
