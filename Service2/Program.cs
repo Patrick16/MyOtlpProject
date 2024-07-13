@@ -2,6 +2,7 @@ using Common.Extensions;
 using Microsoft.EntityFrameworkCore;
 using PostgresDb;
 using Serilog;
+using Service2.Repositories;
 using static Common.Extensions.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Services.AddMySerilog("http://127.0.0.1:4317", Service2Name);
 
 builder.Services.AddMyOpenTelemetry(Service2Name);
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("LocalPostgres");

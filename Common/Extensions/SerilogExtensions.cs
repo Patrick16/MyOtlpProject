@@ -16,12 +16,12 @@ public static class SerilogExtensions
         ResourceBuilder resource = ResourceBuilder.CreateDefault().AddService(resourceName);
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.Development.json")
+            .AddJsonFile("appsettings.json")
             .Build();
         Log.Logger = new LoggerConfiguration()
             .Enrich.WithSpan()
             .ReadFrom.Configuration(configuration)
-            .WriteTo.Sink<CustomLogEventSink>()
+            //.WriteTo.Sink<CustomLogEventSink>()
             .WriteTo.Console()
             .WriteTo.OpenTelemetry(options =>
             {
