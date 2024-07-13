@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 [Controller]
@@ -21,7 +20,7 @@ public class WeatherController : ControllerBase
         WeatherForecast[] forecast;
         // using var activity1 = DiagnosticsConfig.Source.StartActivity("Before", ActivityKind.Internal);
         // {
-        _logger.LogInformation("Get weater forecast");
+        _logger.LogInformation("Get weather forecast");
         forecast = Enumerable.Range(1, 5).Select(index =>
             new WeatherForecast
             (
@@ -31,7 +30,7 @@ public class WeatherController : ControllerBase
             ))
             .ToArray();
 
-        _logger.LogInformation("Weater forecast: {@Response}", forecast);
+        _logger.LogInformation("Weather forecast: {@Response}", forecast);
         _logger.LogInformation("Call another service");
         // }
         // using var activity2 = DiagnosticsConfig.Source.StartActivity("Call", ActivityKind.Internal);
@@ -40,10 +39,10 @@ public class WeatherController : ControllerBase
         var client = _httpClientFactory.CreateClient("myapp2");
         await client.GetAsync("my");
         // }
-        using var activity3 = DiagnosticsConfig.Source.StartActivity("After", ActivityKind.Internal);
-        {
+        //using var activity3 = DiagnosticsConfig.GetSource(Service1Name).StartActivity("After", ActivityKind.Internal);
+        //{
             _logger.LogInformation("Another service was called");
-        }
+        //}
 
         return forecast;
     }

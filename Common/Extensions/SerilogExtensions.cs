@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Resources;
 using Serilog;
 using Serilog.Enrichers.Span;
+using Serilog.Sinks.OpenTelemetry;
 
 namespace Common.Extensions;
 
 public static class SerilogExtensions
 {
-    public static IServiceCollection AddMySerilog(this IServiceCollection services, ResourceBuilder resourceBuilder)
+    public static IServiceCollection AddMySerilog(this IServiceCollection services, string endpoint, string resourceName)
     {
+        ResourceBuilder resource = ResourceBuilder.CreateDefault().AddService(resourceName);
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.Development.json")
@@ -21,13 +22,24 @@ public static class SerilogExtensions
             .Enrich.WithSpan()
             .ReadFrom.Configuration(configuration)
             .WriteTo.Sink<CustomLogEventSink>()
-            .CreateLogger();
+            .WriteTo.Console()
+            .WriteTo.OpenTelemetry(options =>
+            {
+                options.Endpoint = endpoint;
+                options.IncludedData = 
+                    IncludedData.TraceIdField | 
+                    IncludedData.SpanIdField |
+                    IncludedData.TemplateBody;
+            }).CreateLogger();
         services.AddLogging(loggingBuilder =>
         {
             loggingBuilder.ClearProviders();
             loggingBuilder.AddSerilog();
             loggingBuilder.AddOpenTelemetry(options =>
-                               options.SetResourceBuilder(resourceBuilder).IncludeScopes = true);
+            {
+                options.SetResourceBuilder(resource).IncludeScopes = true;
+               // options.AddProcessor(new LogProcessor());
+            });
         });
         return services;
     }

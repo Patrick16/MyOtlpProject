@@ -29,7 +29,7 @@ public class LogProcessor : BaseProcessor<LogRecord>
             {
                 var tags = new ActivityTagsCollection
                 {
-                    { "StackTrace", data.Exception.StackTrace },
+                    {"StackTrace", data.Exception.StackTrace },
                     {"TraceId",data.TraceId},
                     {"SpanId",data.SpanId}
                 };

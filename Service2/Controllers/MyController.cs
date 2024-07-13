@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using static Common.Extensions.Constants;
 
 [Controller]
 [Route("[controller]")]
@@ -16,7 +17,9 @@ public class MyController : ControllerBase
     public async Task<IActionResult> GetOK()
     {
         _logger.LogInformation("Get Ok");
-        using var activity = DiagnosticsConfig.Source.StartActivity("MyActivity", ActivityKind.Internal);
+        using var activity = DiagnosticsConfig
+            .GetSource(Service2Name)
+            .StartActivity("MyActivity", ActivityKind.Internal);
         activity?.AddEvent(new ActivityEvent("my event"));
         await Task.Delay(1000);
         activity?.AddTag("MyTag", "Done");

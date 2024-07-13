@@ -14,6 +14,7 @@ public static class OpenTelemetryExtensions
               .WithTracing(tracing => tracing
                   .AddAspNetCoreInstrumentation()
                   .AddSource(serviceName)
+                  //.AddEntityFrameworkCoreInstrumentation()
                   .AddOtlpExporter(options =>
                   {
                       options.Endpoint = new Uri("http://localhost:4317");

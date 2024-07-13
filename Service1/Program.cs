@@ -1,5 +1,4 @@
 using Common.Extensions;
-using OpenTelemetry.Resources;
 using static Common.Extensions.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +13,8 @@ builder.Services.AddHttpClient("myapp2",
             x.BaseAddress = new Uri("http://localhost:8082");
         });
 
-ResourceBuilder resource = ResourceBuilder.CreateDefault().AddService(Service1Name);
 
-builder.Services.AddMySerilog(resource);
+builder.Services.AddMySerilog("http://127.0.0.1:4317", Service1Name);
 
 builder.Services.AddMyOpenTelemetry(Service1Name);
 
