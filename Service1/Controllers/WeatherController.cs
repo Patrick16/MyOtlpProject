@@ -15,7 +15,7 @@ public class WeatherController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<WeatherForecast[]> GetWeather()
+    public async Task<IActionResult> GetWeather()
     {
         WeatherForecast[] forecast;
         // using var activity1 = DiagnosticsConfig.Source.StartActivity("Before", ActivityKind.Internal);
@@ -37,14 +37,18 @@ public class WeatherController : ControllerBase
         // {
 
         var client = _httpClientFactory.CreateClient("myapp2");
-        await client.GetAsync("my");
+        var user = await client.GetAsync("user/1");
         // }
         //using var activity3 = DiagnosticsConfig.GetSource(Service1Name).StartActivity("After", ActivityKind.Internal);
         //{
             _logger.LogInformation("Another service was called");
         //}
 
-        return forecast;
+        return Ok(new
+        {
+            User = user,
+            forecast = forecast
+        });
     }
 }
 public record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

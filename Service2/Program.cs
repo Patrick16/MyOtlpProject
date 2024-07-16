@@ -1,7 +1,6 @@
 using Common.Extensions;
 using Microsoft.EntityFrameworkCore;
 using PostgresDb;
-using Serilog;
 using Service2.Repositories;
 using static Common.Extensions.Constants;
 
@@ -14,22 +13,22 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddMySerilog("http://127.0.0.1:4317", Service2Name);
 
-builder.Services.AddMyOpenTelemetry(Service2Name);
+builder.Services.AddMyOpenTelemetry("http://127.0.0.1:4317", Service2Name);
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("LocalPostgres");
-builder.Services.AddDbContext<MyContext>(builder =>
+
+builder.Services.AddDbContext<MyContext>(options =>
 {
-    Log.Information("Start Migration");
-    builder.UseNpgsql(connectionString);
-    using var context = new MyContext(builder.Options);
-    context.Database.EnsureCreated();
-    context.Database.Migrate();    
-    Log.Information("End Migration");
+    options.UseNpgsql(connectionString);
 });
 
+var serviceProvider = builder.Services.BuildServiceProvider();
+var dbContext = serviceProvider.GetRequiredService<MyContext>();
+
+dbContext.Database.Migrate();
 
 var app = builder.Build();
 

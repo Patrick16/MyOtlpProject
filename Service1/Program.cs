@@ -16,7 +16,7 @@ builder.Services.AddHttpClient("myapp2",
 
 builder.Services.AddMySerilog("http://127.0.0.1:4317", Service1Name);
 
-builder.Services.AddMyOpenTelemetry(Service1Name);
+builder.Services.AddMyOpenTelemetry("http://127.0.0.1:4317", Service1Name);
 
 var app = builder.Build();
 

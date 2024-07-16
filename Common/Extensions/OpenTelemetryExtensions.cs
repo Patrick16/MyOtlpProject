@@ -7,24 +7,24 @@ namespace Common.Extensions;
 
 public static class OpenTelemetryExtensions
 {
-    public static IServiceCollection AddMyOpenTelemetry(this IServiceCollection services, string serviceName)
+    public static IServiceCollection AddMyOpenTelemetry(this IServiceCollection services, string otlpUrl, string serviceName)
     {
         services.AddOpenTelemetry()
               .ConfigureResource(x => x.AddService(serviceName))
               .WithTracing(tracing => tracing
-                  .AddAspNetCoreInstrumentation()
                   .AddSource(serviceName)
-                  //.AddEntityFrameworkCoreInstrumentation()
+                  .AddAspNetCoreInstrumentation()
+                  .AddEntityFrameworkCoreInstrumentation()
                   .AddOtlpExporter(options =>
                   {
-                      options.Endpoint = new Uri("http://localhost:4317");
+                      options.Endpoint = new Uri(otlpUrl);
                   }))
               .WithMetrics(metrics => metrics
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddOtlpExporter(options =>
                 {
-                    options.Endpoint = new Uri("http://localhost:4317");
+                    options.Endpoint = new Uri(otlpUrl);
                 }));
         return services;
     }

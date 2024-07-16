@@ -14,13 +14,13 @@ public static class SerilogExtensions
     public static IServiceCollection AddMySerilog(this IServiceCollection services, string endpoint, string resourceName)
     {
         ResourceBuilder resource = ResourceBuilder.CreateDefault().AddService(resourceName);
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
+        //var configuration = new ConfigurationBuilder()
+        //    .SetBasePath(Directory.GetCurrentDirectory())
+        //    .AddJsonFile("appsettings.json")
+        //    .Build();
         Log.Logger = new LoggerConfiguration()
             .Enrich.WithSpan()
-            .ReadFrom.Configuration(configuration)
+            //.ReadFrom.Configuration(configuration)
             //.WriteTo.Sink<CustomLogEventSink>()
             .WriteTo.Console()
             .WriteTo.OpenTelemetry(options =>
