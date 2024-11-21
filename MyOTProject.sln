@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service2", "Service2\Service2.csproj", "{8A512BD3-D31B-41EA-A395-F6AB724C3C9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostgresDb", "PostgresDb\PostgresDb.csproj", "{9C7F933C-4D6E-4B61-84B5-1219F6F6B6C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostgresDb", "PostgresDb\PostgresDb.csproj", "{9C7F933C-4D6E-4B61-84B5-1219F6F6B6C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{6C42B46D-DEF8-4C2E-BAAA-D7F2F3F36B31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{6C42B46D-DEF8-4C2E-BAAA-D7F2F3F36B31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

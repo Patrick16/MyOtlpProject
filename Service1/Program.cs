@@ -3,6 +3,7 @@ using static Common.Extensions.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -18,6 +19,7 @@ builder.Services.AddMySerilog("http://127.0.0.1:4317", Service1Name);
 
 builder.Services.AddMyOpenTelemetry("http://127.0.0.1:4317", Service1Name);
 
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -25,6 +27,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseTraceId();
 
 app.UseAuthorization();
 

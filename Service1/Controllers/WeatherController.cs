@@ -43,10 +43,10 @@ public class WeatherController : ControllerBase
         //{
             _logger.LogInformation("Another service was called");
         //}
-
+        var u = await user.Content.ReadAsStringAsync();
         return Ok(new
         {
-            User = user,
+            User = u,
             forecast = forecast
         });
     }

@@ -1,0 +1,18 @@
+{
+    "Dashboard": {
+      "TelemetryLimits": {
+        "MaxLogCount": 10000,
+        "MaxTraceCount": 10000,
+        "MaxMetricsCount": 10000
+      },
+      "Frontend": {
+        "AuthMode": "BrowserToken",
+        "BrowserToken": "test"
+      },
+      "Otlp": {
+        "AuthMode": "ApiKey",
+        "PrimaryApiKey": "test"
+      }
+    }
+  }
+  

@@ -1,7 +1,6 @@
 
 using Serilog.Core;
 using Serilog.Events;
-using System;
 using System.Diagnostics;
 
 public class CustomLogEventSink : ILogEventSink

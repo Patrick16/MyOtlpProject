@@ -14,23 +14,23 @@ public static class SerilogExtensions
     public static IServiceCollection AddMySerilog(this IServiceCollection services, string endpoint, string resourceName)
     {
         ResourceBuilder resource = ResourceBuilder.CreateDefault().AddService(resourceName);
-        //var configuration = new ConfigurationBuilder()
-        //    .SetBasePath(Directory.GetCurrentDirectory())
-        //    .AddJsonFile("appsettings.json")
-        //    .Build();
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
         Log.Logger = new LoggerConfiguration()
             .Enrich.WithSpan()
-            //.ReadFrom.Configuration(configuration)
+            .ReadFrom.Configuration(configuration)
             //.WriteTo.Sink<CustomLogEventSink>()
-            .WriteTo.Console()
             .WriteTo.OpenTelemetry(options =>
             {
                 options.Endpoint = endpoint;
-                options.IncludedData = 
-                    IncludedData.TraceIdField | 
+                options.IncludedData =
+                    IncludedData.TraceIdField |
                     IncludedData.SpanIdField |
                     IncludedData.TemplateBody;
-            }).CreateLogger();
+            }
+            ).CreateLogger();
         services.AddLogging(loggingBuilder =>
         {
             loggingBuilder.ClearProviders();
@@ -38,7 +38,9 @@ public static class SerilogExtensions
             loggingBuilder.AddOpenTelemetry(options =>
             {
                 options.SetResourceBuilder(resource).IncludeScopes = true;
-               // options.AddProcessor(new LogProcessor());
+                options.IncludeFormattedMessage = true;
+                options.ParseStateValues = true;
+                //options.AddProcessor(new LogProcessor());
             });
         });
         return services;
